@@ -4,6 +4,7 @@
 package main.java;
 
 import processing.core.PApplet;
+import reusable.guitar.GuitarString;
 //import reusable.audio.StdAudio;
 
 /**
@@ -35,17 +36,18 @@ public class GuitarHeroVisual extends PApplet {
 	
 	public void draw(){
 		background(255);
+		
 		mStringManager.draw();
 		
 		//44100 / 60fps = 735 tics per frame for real time
 		//Play 2x (slightly faster) to fill the StdAudio buffer more quickly and prevent the weird pauses???
 		//Or maybe just fast enough (since its not always 60fps) to deliver 44100 samples/sec
 		if(!pauseTic){
-			for(int i = 0; i < 735*2; ++i){
+			for(int i = 0; i < GuitarString.SAMPLE_RATE/frameRate; ++i){
 				mStringManager.ticPlayAll();
 			}
 		}
-		//System.out.println(frameRate);
+		//if(frameCount%10==0) System.out.println(frameRate);
 	}
 	
 	public void keyPressed() {
@@ -56,10 +58,11 @@ public class GuitarHeroVisual extends PApplet {
 			pauseTic = !pauseTic;
 		}
 		else if(key == '\n'){
-			mStringManager.ticAllOneCycle();
+			if(pauseTic){ //only let this run if the display is paused
+				mStringManager.ticAllOneCycle();
+			}
 		}
-		//keys qwertyuiop[] play the 12 strings
-		//key 1 to play 13th rip
+		//keys qwertyuiop[]\ play the 13 strings
 		else if(key == 'q'){
 			mStringManager.pluck(0);
 		}
@@ -96,7 +99,7 @@ public class GuitarHeroVisual extends PApplet {
 		else if(key == ']'){
 			mStringManager.pluck(11);
 		}
-		else if(key == '1'){
+		else if(key == '\\'){
 			mStringManager.pluck(12);
 		}
 	}

@@ -107,7 +107,7 @@ public class GuitarString {
 	//Private variables
 	
 	//Sample rate of our audio
-	private final int SAMPLE_RATE = 44100;
+	public final static int SAMPLE_RATE = 44100;
 
 	//decay rate of the string
 	private final float DECAY_FACTOR = 0.992F;

@@ -1,3 +1,7 @@
+#MINE
+release/
+
+#DEFAULTS
 
 .metadata
 bin/

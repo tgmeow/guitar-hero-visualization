@@ -12,7 +12,6 @@ public class StringComponent{
 		this.xStepDist = xStepDist;
 		this.yHeight = yHeight;
 		this.parent = p;
-		this.draw = true;
 		mString = new GuitarString(frequency);
 	}
 	
@@ -68,7 +67,7 @@ public class StringComponent{
 	private float yHeight;
 	
 	private PApplet parent;
-	private boolean draw;
+	private boolean draw = true;
 	private GuitarString mString;
 
 }
