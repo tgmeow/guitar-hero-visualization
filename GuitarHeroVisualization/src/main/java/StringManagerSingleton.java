@@ -7,11 +7,28 @@ import processing.core.PApplet;
 import main.java.StringComponent;
 import reusable.audio.StdAudio;
 
-public class StringManagerComponent {
+public enum StringManagerSingleton {
+	INSTANCE;
+//	private StringManagerComponent(PApplet p){
+//		this.parent = p;
+//		this.strings = new LinkedList<StringComponent>();
+//	}
 	
-	public StringManagerComponent(PApplet p){
-		this.parent = p;
-		this.strings = new LinkedList<StringComponent>();
+	
+	public static StringManagerSingleton getInstance(){
+		if(strings == null){
+			strings = new LinkedList<StringComponent>();
+		}
+		return INSTANCE;
+	}
+	
+	//Only need to pass in the PApplet on the first getInstance
+	public static StringManagerSingleton getInstance(PApplet p){
+		parent = p;
+		if(strings == null){
+			strings = new LinkedList<StringComponent>();
+		}
+		return INSTANCE;
 	}
 	
 	public void draw(){
@@ -84,8 +101,8 @@ public class StringManagerComponent {
 	
 	//Private variables
 	
-	private PApplet parent;
+	private static PApplet parent;
 	
 	//Holds our guitar strings
-	private LinkedList<StringComponent> strings;
+	private static LinkedList<StringComponent> strings;
 }
