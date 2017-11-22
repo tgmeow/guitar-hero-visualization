@@ -7,102 +7,138 @@ import processing.core.PApplet;
 import main.java.StringComponent;
 import reusable.audio.StdAudio;
 
+/**
+ * Singleton pattern for the StringManager. Wraps the StringComponents to create helper methods that
+ * can run StringComponent methods in bulk.
+ *
+ * @author tgmeow
+ */
 public enum StringManagerSingleton {
-	INSTANCE;
-//	private StringManagerComponent(PApplet p){
-//		this.parent = p;
-//		this.strings = new LinkedList<StringComponent>();
-//	}
-	
-	
-	public static StringManagerSingleton getInstance(){
-		if(strings == null){
-			strings = new LinkedList<StringComponent>();
-		}
-		return INSTANCE;
-	}
-	
-	//Only need to pass in the PApplet on the first getInstance
-	public static StringManagerSingleton getInstance(PApplet p){
-		parent = p;
-		if(strings == null){
-			strings = new LinkedList<StringComponent>();
-		}
-		return INSTANCE;
-	}
-	
-	public void draw(){
-		//draw strings
-		int spacing = 50;
-		int y = spacing;
-		for(Iterator<StringComponent> it = strings.iterator(); it.hasNext();){
-			parent.pushMatrix();
-				parent.translate(100, y);
-				it.next().draw();
-			parent.popMatrix();
-			y += spacing;
-		}
-		
-	}
-	
-	public void addString(float frequency){
-		float rounded = Math.round(frequency*10)/10.0F;
-		strings.add(new StringComponent(parent, frequency, strings.size() + "[" + rounded + "]", 5F, 80F));
-	}
-	
-	public void pluck(int index){
-		if(index >= 0 && index < strings.size()){
-			strings.get(index).pluck();
-		} else{
-			//TODO
-		}
-	}
-	
-	public void pluckAll(){
-		for(Iterator<StringComponent> it = strings.iterator(); it.hasNext();){
-			it.next().pluck();
-		}
-	}
-	
-	public void tic(int index){
-		if(index >= 0 && index < strings.size()){
-			strings.get(index).tic();
-		} else{
-			//TODO
-		}
-	}
-	
-	public void ticAll(){
-		//TODO
-		for(Iterator<StringComponent> it = strings.iterator(); it.hasNext();){
-			it.next().tic();
-		}
-	}
-	
-	public void ticPlayAll(){
-		float sum = 0;
-		for(Iterator<StringComponent> it = strings.iterator(); it.hasNext();){
-			StringComponent ret = it.next();
-			ret.tic();
-			sum += ret.sample();
-		}
-		StdAudio.play(sum);
-	}
-	
-	public void ticAllOneCycle(){
-		for(Iterator<StringComponent> it = strings.iterator(); it.hasNext();){
-			StringComponent ret = it.next();
-			for(int i = 0; i < ret.size(); ++i){
-				ret.tic();
-			}
-		}
-	}
+  INSTANCE;
 
-	
-	//Private variables
-	
-	private static PApplet parent;
-	
-	//Holds our guitar strings
-	private static LinkedList<StringComponent> strings;
+  /**
+   * A PApplet MUST be passed in (at least once) on the first getInstance. Throws an exception if
+   * the parent is missing
+   *
+   * @return Singleton instance of the StringManager
+   */
+  public static StringManagerSingleton getInstance() {
+    //This is a slightly ugly solution, but it ensures that a PApplet is passed in and
+    //simplifies future calls to retrieve the singleton
+    if (parent == null) {
+      throw new IllegalStateException("Unable to return instance without parent PApplet.");
+    }
+    return INSTANCE;
+  }
+
+  /**
+   * A PApplet MUST be passed in (at least once) when it is first used.
+   *
+   * @return Singleton instance of the StringManager
+   */
+  public static StringManagerSingleton setInstance(PApplet p) {
+    parent = p;
+    return INSTANCE;
+  }
+
+  /**
+   * Draw the strings at (LOCAL POSITIONING). TODO currently draw the strings at locally specified
+   * positioning
+   */
+  public void draw() {
+    //TODO remove local constants
+    int spacing = 50;
+    int y = spacing;
+    for (Iterator<StringComponent> it = strings.iterator(); it.hasNext(); ) {
+      parent.pushMatrix();
+      parent.translate(100, y);
+      it.next().draw();
+      parent.popMatrix();
+      y += spacing;
+    }
+  }
+
+  /**
+   * Add a string of the specified frequency to the list of strings
+   *
+   * @param frequency of the string
+   */
+  public void addString(float frequency) {
+    float rounded = Math.round(frequency * 10) / 10.0F;
+    strings.add(
+        new StringComponent(parent, frequency, strings.size() + "[" + rounded + "]", 5F, 80F));
+  }
+
+  /**
+   * Pluck the string specified by index TODO OUT OF RANGE BEHAVIOUR
+   *
+   * @param index which string to pluck
+   */
+  public void pluck(int index) {
+    if (index >= 0 && index < strings.size()) {
+      strings.get(index).pluck();
+    }
+  }
+
+  /** Pluck all the strings */
+  public void pluckAll() {
+    for (Iterator<StringComponent> it = strings.iterator(); it.hasNext(); ) {
+      it.next().pluck();
+    }
+  }
+
+  /**
+   * Tic one of the strings (advance simulation one step) TODO OUT OF RANGE BEHAVIOUR
+   *
+   * @param index which string to tic
+   */
+  public void tic(int index) {
+    if (index >= 0 && index < strings.size()) {
+      strings.get(index).tic();
+    }
+  }
+
+  /** Tic all the strings (advance simulation one step) */
+  public void ticAll() {
+    for (Iterator<StringComponent> it = strings.iterator(); it.hasNext(); ) {
+      it.next().tic();
+    }
+  }
+
+  /** Tic all the strings AND plays the combined sound (samples) in StdAudio */
+  public void ticPlayAll() {
+    float sum = 0;
+    for (Iterator<StringComponent> it = strings.iterator(); it.hasNext(); ) {
+      StringComponent ret = it.next();
+      ret.tic();
+      sum += ret.sample();
+    }
+    StdAudio.play(sum);
+  }
+
+  /**
+   * Tic every string one cycle. One cycle is the length of that string. This just looks nice for
+   * demonstration purposes.
+   */
+  public void ticAllOneCycle() {
+    for (Iterator<StringComponent> it = strings.iterator(); it.hasNext(); ) {
+      StringComponent ret = it.next();
+      for (int i = 0; i < ret.size(); ++i) {
+        ret.tic();
+      }
+    }
+  }
+
+  /** Reset the instance to the initial state. Releases the parent object. */
+  public void reset() {
+    strings.clear();
+    parent = null;
+  }
+
+  //Private variables
+
+  private static PApplet parent;
+
+  //Data structure for our guitar strings
+  private static LinkedList<StringComponent> strings = new LinkedList<StringComponent>();
 }
