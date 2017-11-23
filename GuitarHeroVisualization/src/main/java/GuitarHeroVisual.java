@@ -52,7 +52,7 @@ public class GuitarHeroVisual extends PApplet {
         StringManagerSingleton.getInstance().ticPlayAll();
       }
     }
-    //if(frameCount%10==0) System.out.println(frameRate);
+    if(frameCount%10==0) System.out.println(frameRate);
   }
 
   /** Called when a key gets pressed */

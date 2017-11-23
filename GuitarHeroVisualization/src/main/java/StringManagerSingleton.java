@@ -1,6 +1,5 @@
 package main.java;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import processing.core.PApplet;
@@ -47,15 +46,19 @@ public enum StringManagerSingleton {
    */
   public void draw() {
     //TODO remove local constants
-    int spacing = 50;
-    int y = spacing;
-    for (Iterator<StringComponent> it = strings.iterator(); it.hasNext(); ) {
-      parent.pushMatrix();
-      parent.translate(100, y);
-      it.next().draw();
-      parent.popMatrix();
-      y += spacing;
-    }
+    int spacingY = 50;
+    int spacingX = 100;
+
+    parent.pushMatrix();
+    parent.translate(spacingX, spacingY);
+    strings
+        .stream()
+        .forEach(
+            (str) -> {
+              str.draw();
+              parent.translate(0, spacingY);
+            });
+    parent.popMatrix();
   }
 
   /**
@@ -64,9 +67,11 @@ public enum StringManagerSingleton {
    * @param frequency of the string
    */
   public void addString(float frequency) {
-    float rounded = Math.round(frequency * 10) / 10.0F;
-    strings.add(
-        new StringComponent(parent, frequency, strings.size() + "[" + rounded + "]", 5F, 80F));
+    float roundedLabelFreq = Math.round(frequency * 10) / 10.0F;
+    String label = strings.size() + " [" + roundedLabelFreq + "]";
+    float xStep = 5;
+    float yHeight = 80;
+    strings.add(new StringComponent(parent, frequency, label, xStep, yHeight));
   }
 
   /**
@@ -82,9 +87,7 @@ public enum StringManagerSingleton {
 
   /** Pluck all the strings */
   public void pluckAll() {
-    for (Iterator<StringComponent> it = strings.iterator(); it.hasNext(); ) {
-      it.next().pluck();
-    }
+    strings.stream().forEach((str) -> str.pluck());
   }
 
   /**
@@ -100,19 +103,12 @@ public enum StringManagerSingleton {
 
   /** Tic all the strings (advance simulation one step) */
   public void ticAll() {
-    for (Iterator<StringComponent> it = strings.iterator(); it.hasNext(); ) {
-      it.next().tic();
-    }
+    strings.stream().forEach((str) -> str.tic());
   }
 
   /** Tic all the strings AND plays the combined sound (samples) in StdAudio */
   public void ticPlayAll() {
-    float sum = 0;
-    for (Iterator<StringComponent> it = strings.iterator(); it.hasNext(); ) {
-      StringComponent ret = it.next();
-      ret.tic();
-      sum += ret.sample();
-    }
+    float sum = (float) strings.stream().mapToDouble(str -> str.ticAndSample()).sum();
     StdAudio.play(sum);
   }
 
@@ -121,12 +117,14 @@ public enum StringManagerSingleton {
    * demonstration purposes.
    */
   public void ticAllOneCycle() {
-    for (Iterator<StringComponent> it = strings.iterator(); it.hasNext(); ) {
-      StringComponent ret = it.next();
-      for (int i = 0; i < ret.size(); ++i) {
-        ret.tic();
-      }
-    }
+    strings
+        .stream()
+        .forEach(
+            (str) -> {
+              for (int i = 0; i < str.size(); ++i) {
+                str.tic();
+              }
+            });
   }
 
   /** Reset the instance to the initial state. Releases the parent object. */

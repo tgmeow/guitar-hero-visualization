@@ -87,6 +87,15 @@ public class StringComponent {
   public float sample() {
     return mString.sample();
   }
+  
+  /**
+   * Does tic and then sample in one method
+   * @return a float representing the current state of the string
+   */
+  public float ticAndSample(){
+	  mString.tic();
+	  return mString.sample();
+  }
 
   /**
    * Get the length of the GuitarString object.

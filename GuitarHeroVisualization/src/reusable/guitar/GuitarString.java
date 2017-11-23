@@ -37,7 +37,7 @@ public class GuitarString {
     this.mQueue = new LinkedList<Float>();
 
     //calculate size of queue and fill with zeros
-    int n = (int) Math.floor(SAMPLE_RATE / frequency + 0.5F);
+    int n = (int) Math.round(SAMPLE_RATE / frequency);
     for (int i = 0; i < n; i++) {
       mQueue.addLast(0.0F);
     }
