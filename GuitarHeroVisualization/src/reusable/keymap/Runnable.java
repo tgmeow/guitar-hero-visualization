@@ -12,9 +12,7 @@ public abstract class Runnable implements Comparable<Runnable> {
    */
   public abstract String getComparableID();
 
-  /**
-   * Implement a compareTo method in case sorting is needed
-   */
+  /** Implement a compareTo method in case sorting is needed */
   @Override
   public int compareTo(Runnable o) { // TODO Auto-generated method stub
     return getComparableID().compareTo(o.getComparableID());

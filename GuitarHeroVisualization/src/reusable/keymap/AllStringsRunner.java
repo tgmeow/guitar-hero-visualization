@@ -4,22 +4,18 @@ import main.java.StringManagerSingleton;
 
 /**
  * Runnable class that plucks all strings
- * @author tgmeow
  *
+ * @author tgmeow
  */
 public class AllStringsRunner extends Runnable {
-	
-	/**
-	 * Plucks all the strings in the StringManagerSingleton
-	 */
+
+  /** Plucks all the strings in the StringManagerSingleton */
   @Override
   public void run() {
     StringManagerSingleton.getInstance().pluckAll();
   }
 
-  /**
-   * Returns "ASR"
-   */
+  /** Returns "ASR" */
   @Override
   public String getComparableID() {
     return "ASR";

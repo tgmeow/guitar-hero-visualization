@@ -1,8 +1,14 @@
 /** */
 package main.java;
 
+import java.util.TreeSet;
+
 import processing.core.PApplet;
 import reusable.guitar.GuitarString;
+import reusable.keymap.AllStringsRunner;
+import reusable.keymap.KeyMapSingleton;
+import reusable.keymap.MultiStringRunner;
+import reusable.keymap.SingleStringRunner;
 
 /**
  * Main Processing applet. Visualizes a guitar string
@@ -34,6 +40,20 @@ public class GuitarHeroVisual extends PApplet {
       float factor = (float) Math.pow(2, i / 12.0);
       StringManagerSingleton.getInstance().addString(CONCERT_A * factor);
     }
+
+    KeyMapSingleton keyMap = KeyMapSingleton.getInstance();
+    keyMap.addRunnable('a', new AllStringsRunner());
+    //keyMap.addRunnable('q', new SingleStringRunner(0));
+    char[] keys = new char[] {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'};
+    for (int i = 0; i < keys.length; ++i) {
+      keyMap.addRunnable(keys[i], new SingleStringRunner(i));
+    }
+
+    TreeSet<Integer> chordA = new TreeSet<Integer>();
+    chordA.add(0);
+    chordA.add(4);
+    chordA.add(7);
+    keyMap.addRunnable('z', new MultiStringRunner(chordA));
   }
 
   /** Main draw loop. Target fps is 60, but 30 is also fine. */
@@ -52,48 +72,18 @@ public class GuitarHeroVisual extends PApplet {
         StringManagerSingleton.getInstance().ticPlayAll();
       }
     }
-    if(frameCount%10==0) System.out.println(frameRate);
+    //if (frameCount % 10 == 0) System.out.println(frameRate);
   }
 
   /** Called when a key gets pressed */
   public void keyPressed() {
-    if (key == 'a') {
-      StringManagerSingleton.getInstance().pluckAll();
-    } else if (key == ' ') {
+    if (key == ' ') {
       pauseTic = !pauseTic;
     } else if (key == '\n') {
       if (pauseTic) { //only let this run if the display is paused
         StringManagerSingleton.getInstance().ticAllOneCycle();
       }
-    }
-    //keys qwertyuiop[]\ play the 13 strings
-    else if (key == 'q') {
-      StringManagerSingleton.getInstance().pluck(0);
-    } else if (key == 'w') {
-      StringManagerSingleton.getInstance().pluck(1);
-    } else if (key == 'e') {
-      StringManagerSingleton.getInstance().pluck(2);
-    } else if (key == 'r') {
-      StringManagerSingleton.getInstance().pluck(3);
-    } else if (key == 't') {
-      StringManagerSingleton.getInstance().pluck(4);
-    } else if (key == 'y') {
-      StringManagerSingleton.getInstance().pluck(5);
-    } else if (key == 'u') {
-      StringManagerSingleton.getInstance().pluck(6);
-    } else if (key == 'i') {
-      StringManagerSingleton.getInstance().pluck(7);
-    } else if (key == 'o') {
-      StringManagerSingleton.getInstance().pluck(8);
-    } else if (key == 'p') {
-      StringManagerSingleton.getInstance().pluck(9);
-    } else if (key == '[') {
-      StringManagerSingleton.getInstance().pluck(10);
-    } else if (key == ']') {
-      StringManagerSingleton.getInstance().pluck(11);
-    } else if (key == '\\') {
-      StringManagerSingleton.getInstance().pluck(12);
-    }
+    } else KeyMapSingleton.getInstance().run(key);
   }
 
   //Pauses the execution of tics

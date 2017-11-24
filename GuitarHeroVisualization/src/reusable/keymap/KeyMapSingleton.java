@@ -31,6 +31,7 @@ public enum KeyMapSingleton {
 
   /**
    * Get all the runnables associated with some key
+   *
    * @param key
    * @return Map of what keys the char maps to. May be null.
    */
@@ -45,10 +46,10 @@ public enum KeyMapSingleton {
    * @param runnable the Runnable to add to the Map
    */
   public void addRunnable(char c, Runnable runnable) {
-	  if(!mKeyMap.containsKey(c)){
-		  mKeyMap.put(c, new HashMap<String, Runnable>());
-	  }
-	  mKeyMap.get(c).put(runnable.getComparableID(), runnable);
+    if (!mKeyMap.containsKey(c)) {
+      mKeyMap.put(c, new HashMap<String, Runnable>());
+    }
+    mKeyMap.get(c).put(runnable.getComparableID(), runnable);
   }
 
   /**
@@ -81,20 +82,18 @@ public enum KeyMapSingleton {
    * @param comparableString
    */
   public void removeRunnables(String comparableString) {
-    for (Iterator<Character> iterator = mKeyMap.keySet().iterator(); iterator.hasNext();) {
-    	char c = iterator.next();
+    for (Iterator<Character> iterator = mKeyMap.keySet().iterator(); iterator.hasNext(); ) {
+      char c = iterator.next();
       mKeyMap.get(c).remove(comparableString);
       if (mKeyMap.get(c).isEmpty()) {
         mKeyMap.remove(c); //TODO Does this break the forEach pattern?
       }
     }
   }
-  
-  /**
-   * @return The total number of runnables in this KeyMap
-   */
-  public int getNumRunnables(){
-	  return mKeyMap.values().stream().mapToInt(map -> map.size()).sum();
+
+  /** @return The total number of runnables in this KeyMap */
+  public int getNumRunnables() {
+    return mKeyMap.values().stream().mapToInt(map -> map.size()).sum();
   }
 
   //Map from character pressed to a HashMap from comparable String to Runnable items
