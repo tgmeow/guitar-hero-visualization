@@ -1,8 +1,9 @@
 package reusable.keymap;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Singleton pattern for mapping key char (or code?) to Runnable. Many to few relationship from
@@ -82,8 +83,9 @@ public enum KeyMapSingleton {
    * @param comparableString
    */
   public void removeRunnables(String comparableString) {
-    for (Iterator<Character> iterator = mKeyMap.keySet().iterator(); iterator.hasNext(); ) {
-      char c = iterator.next();
+    //need to make a copy of the set because we may be modifying the key set
+    Set<Character> chars = new TreeSet<Character>(mKeyMap.keySet());
+    for (char c : chars) {
       mKeyMap.get(c).remove(comparableString);
       if (mKeyMap.get(c).isEmpty()) {
         mKeyMap.remove(c); //TODO Does this break the forEach pattern?

@@ -135,7 +135,7 @@ public enum StringManagerSingleton {
 
   //Private variables
 
-  private static PApplet parent;
+  private static PApplet parent = null;
 
   //Data structure for our guitar strings
   private static LinkedList<StringComponent> strings = new LinkedList<StringComponent>();

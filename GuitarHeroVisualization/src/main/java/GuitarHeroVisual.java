@@ -9,6 +9,8 @@ import reusable.keymap.AllStringsRunner;
 import reusable.keymap.KeyMapSingleton;
 import reusable.keymap.MultiStringRunner;
 import reusable.keymap.SingleStringRunner;
+import reusable.menu.ButtonController;
+import reusable.menu.MenuSingleton;
 
 /**
  * Main Processing applet. Visualizes a guitar string
@@ -54,11 +56,21 @@ public class GuitarHeroVisual extends PApplet {
     chordA.add(4);
     chordA.add(7);
     keyMap.addRunnable('z', new MultiStringRunner(chordA));
+    
+    MenuSingleton.setInstance(this);
+    MenuSingleton.getInstance().addController("Button1", new ButtonController(this, "Button1", 1050, 550));
   }
 
   /** Main draw loop. Target fps is 60, but 30 is also fine. */
   public void draw() {
     background(255);
+    //Process menu data at the beginning
+    MenuSingleton menuSing = MenuSingleton.getInstance();
+    if((boolean) menuSing.getControllerValue("Button1")){
+    	KeyMapSingleton.getInstance().run('q');
+    }
+    
+    
 
     StringManagerSingleton.getInstance().draw();
 
@@ -73,6 +85,8 @@ public class GuitarHeroVisual extends PApplet {
       }
     }
     //if (frameCount % 10 == 0) System.out.println(frameRate);
+    
+    MenuSingleton.getInstance().draw();
   }
 
   /** Called when a key gets pressed */
@@ -84,6 +98,20 @@ public class GuitarHeroVisual extends PApplet {
         StringManagerSingleton.getInstance().ticAllOneCycle();
       }
     } else KeyMapSingleton.getInstance().run(key);
+  }
+  
+  /**
+   * Handle mouse presses
+   */
+  public void mousePressed(){
+	  MenuSingleton.getInstance().pressUpdate(mouseX, mouseY);
+  }
+  
+  /**
+   * Handle mouse releases
+   */
+  public void mouseReleased(){
+	  MenuSingleton.getInstance().releaseUpdate(mouseX, mouseY);
   }
 
   //Pauses the execution of tics
