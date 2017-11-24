@@ -12,21 +12,32 @@ import reusable.button.Button;
  */
 public class ButtonController extends Controller<Boolean> {
 
-  public ButtonController(PApplet p, String displayName, int trueX, int trueY) {
-	mButton = new Button(p, trueX, trueY, 50, 20);
+  public ButtonController(PApplet p, String displayName) {
+	  mButton = new Button(p, getButtonX(), getButtonY(), buttonWidth, buttonHeight);
     this.parent = p;
     this.displayName = displayName;
-    this.trueX = trueX;
-    this.trueY = trueY;
   }
-
+  
   @Override
   public void draw() {
     // TODO Draw button label, button, current value
-	  parent.text(displayName, trueX, trueY);
+	  parent.text(displayName, trueX, getStateY());
 	  mButton.draw();
-	  parent.text(String.valueOf(currentValue), trueX + 50, trueY + 50);
-
+	  parent.text(String.valueOf(currentValue), getStateX(), getStateY());
+  }
+  
+  @Override
+  public void setPosition(int x, int y){
+	  this.trueX = x;
+	  this.trueY = y;
+	  mButton.reposition(getButtonX(), getButtonY());
+  }
+  
+  @Override
+  public void setDimensions(int x,int y){
+	  this.allocX = x;
+	  this.allocY = y;
+	  mButton.reposition(getButtonX(), getButtonY());
   }
 
   @Override

@@ -2,7 +2,10 @@ package reusable.menu;
 
 import java.util.HashMap;
 
+import org.omg.PortableInterceptor.IORInterceptor;
+
 import processing.core.PApplet;
+import processing.core.PConstants;
 
 /**
  * Singleton pattern for a menu with multiple controllers of varying types
@@ -40,6 +43,7 @@ public enum MenuSingleton {
 	 * Draw the menu.. TODO location unknown
 	 */
 	public void draw(){
+		parent.textAlign(PConstants.LEFT, PConstants.CENTER);
 		mMenuItems.values().stream().forEach(contr -> contr.draw());
 	}
 	
@@ -67,6 +71,8 @@ public enum MenuSingleton {
 	 * @param contr Controller to add
 	 */
 	public <T> void addController(String key, Controller<T> contr){
+		contr.setPosition(parent.width - menuWidth, mMenuItems.size()*controllerHeight);
+		contr.setDimensions(menuWidth, controllerHeight);
 		mMenuItems.put(key, contr);
 	}
 	
@@ -100,4 +106,11 @@ public enum MenuSingleton {
 	//TODO raw types help I don't actually know Java
 	//Map from String ID to Controller
 	private HashMap<String, Controller> mMenuItems = new HashMap<String, Controller>();
+	
+	//Other private variables for setting Menu layout, width, colors, etc
+	
+	private int curPos = PConstants.RIGHT;
+	private int menuWidth = 250;
+	private int controllerHeight = 40;
+	
 }

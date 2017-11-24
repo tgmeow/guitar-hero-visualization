@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import reusable.runnables.Runnable;
+
 /**
  * Singleton pattern for mapping key char (or code?) to Runnable. Many to few relationship from
  * added keys to Runners (many keys can map to the same action)

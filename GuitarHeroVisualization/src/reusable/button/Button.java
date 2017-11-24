@@ -28,6 +28,11 @@ public class Button {
   public void draw() {
     parent.rect(trueX, trueY, width, height);
   }
+  
+  public void reposition(int x, int y){
+	  trueX = x;
+	  trueY = y;
+  }
 
   /**
    * Determines if the given coordinate is located inside the Button. Use in processing mouse

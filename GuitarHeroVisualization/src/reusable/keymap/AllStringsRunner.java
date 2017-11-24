@@ -1,6 +1,7 @@
 package reusable.keymap;
 
 import main.java.StringManagerSingleton;
+import reusable.runnables.Runnable;
 
 /**
  * Runnable class that plucks all strings

@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import main.java.StringManagerSingleton;
+import reusable.runnables.Runnable;
 
 /**
  * Allows for plucks of multiple strings in one Runnable for uniquely identifiable chords.

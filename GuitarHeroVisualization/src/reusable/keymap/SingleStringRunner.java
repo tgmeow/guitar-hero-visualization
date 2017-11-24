@@ -1,6 +1,7 @@
 package reusable.keymap;
 
 import main.java.StringManagerSingleton;
+import reusable.runnables.Runnable;
 
 /**
  * Runnable class for processing a keypress that plucks a string. Ideally, one-to-one relationship

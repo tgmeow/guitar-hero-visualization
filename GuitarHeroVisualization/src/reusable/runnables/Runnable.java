@@ -1,4 +1,4 @@
-package reusable.keymap;
+package reusable.runnables;
 
 public abstract class Runnable implements Comparable<Runnable> {
 

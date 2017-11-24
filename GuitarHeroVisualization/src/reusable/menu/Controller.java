@@ -14,12 +14,48 @@ public abstract class Controller<T> {
 	protected String displayName;
 	
 	//The true X and Y location of this Controller. Used for mousePress events
+	//Allocated space for this controller. aka dimensions
 	protected int trueX, trueY;
+	
+	protected int allocX = 150, allocY = 40;
+	
+	protected int buttonWidth = 50, buttonHeight = 20;
+	  protected int getButtonX(){
+		  return Math.round(trueX + allocX/3.0F);
+	  }
+	  
+	  protected int getButtonY(){
+		  return Math.round(trueY + ((allocY-buttonHeight)*0.5F));
+	  }
+	  
+	  protected int getStateX(){
+		  return Math.round(trueX + allocX*2.0F/3.0F);
+	  }
+	  
+	  protected int getStateY(){
+		  return Math.round(trueY + (allocY * 0.5F));
+	  }
+	
 	
 	/**
 	 * Draw the specified controller at 0,0 Top left corner aligned
 	 */
 	public abstract void draw();
+	
+	/**
+	 * Set the positioning of controller
+	 * @param x
+	 * @param y
+	 */
+	public abstract void setPosition(int x, int y);
+	
+	/**
+	 * Set the positioning of controller
+	 * @param x
+	 * @param y
+	 */
+	public abstract void setDimensions(int x, int y);
+	
 	
 	/**
 	 * Pass in the mousePress event. Should pass in the raw coordinates.

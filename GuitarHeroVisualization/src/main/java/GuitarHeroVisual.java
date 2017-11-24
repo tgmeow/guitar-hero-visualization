@@ -58,7 +58,7 @@ public class GuitarHeroVisual extends PApplet {
     keyMap.addRunnable('z', new MultiStringRunner(chordA));
     
     MenuSingleton.setInstance(this);
-    MenuSingleton.getInstance().addController("Button1", new ButtonController(this, "Button1", 1050, 550));
+    MenuSingleton.getInstance().addController("Button1", new ButtonController(this, "Button1"));
   }
 
   /** Main draw loop. Target fps is 60, but 30 is also fine. */
