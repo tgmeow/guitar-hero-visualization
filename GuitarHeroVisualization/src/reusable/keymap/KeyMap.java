@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import reusable.runnables.Runnable;
+import reusable.events.Runnable;
 
 /**
  * Singleton pattern for mapping key char (or code?) to Runnable. Many to few relationship from
@@ -13,11 +13,11 @@ import reusable.runnables.Runnable;
  *
  * @author tgmeow
  */
-public enum KeyMapSingleton {
+public enum KeyMap {
   INSTANCE;
 
   /** Constructor for KeyMapSingleton */
-  public static KeyMapSingleton getInstance() {
+  public static KeyMap getInstance() {
     return INSTANCE;
   }
 

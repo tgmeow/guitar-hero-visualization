@@ -2,7 +2,7 @@ package reusable.menu;
 
 import processing.core.PApplet;
 import reusable.button.Button;
-import reusable.runnables.Runnable;
+import reusable.events.Runnable;
 
 /**
  * Runs the runnable item when the button is clicked.

@@ -89,9 +89,12 @@ public class GuitarString {
 
   //Sample rate of our audio
   public static final int SAMPLE_RATE = 44100;
+  
+  //Tic time step
+  public static final double TIME_STEP = 1.0/44100;
 
   //decay rate of the string
-  private final float DECAY_FACTOR = 0.992F;
+  private final float DECAY_FACTOR = 0.996F;
 
   //data structure to hold the string values.
   //A linked list used like a queue because need to iterate through.

@@ -1,10 +1,12 @@
 package main.java;
 
 import java.util.LinkedList;
-
 import processing.core.PApplet;
+
 import main.java.StringComponent;
 import reusable.audio.StdAudio;
+import reusable.events.EventQueue;
+import reusable.guitar.GuitarString;
 
 /**
  * Singleton pattern for the StringManager. Wraps the StringComponents to create helper methods that
@@ -12,7 +14,7 @@ import reusable.audio.StdAudio;
  *
  * @author tgmeow
  */
-public enum StringManagerSingleton {
+public enum StringManager {
   INSTANCE;
 
   /**
@@ -21,7 +23,7 @@ public enum StringManagerSingleton {
    *
    * @return Singleton instance of the StringManager
    */
-  public static StringManagerSingleton getInstance() {
+  public static StringManager getInstance() {
     //This is a slightly ugly solution, but it ensures that a PApplet is passed in and
     //simplifies future calls to retrieve the singleton
     if (parent == null) {
@@ -35,7 +37,7 @@ public enum StringManagerSingleton {
    *
    * @return Singleton instance of the StringManager
    */
-  public static StringManagerSingleton setInstance(PApplet p) {
+  public static StringManager setInstance(PApplet p) {
     parent = p;
     return INSTANCE;
   }
@@ -70,7 +72,7 @@ public enum StringManagerSingleton {
     float roundedLabelFreq = Math.round(frequency * 10) / 10.0F;
     String label = strings.size() + " [" + roundedLabelFreq + "]";
     float xStep = 5;
-    float yHeight = 80;
+    float yHeight = 40;
     strings.add(new StringComponent(parent, frequency, label, xStep, yHeight));
   }
 
@@ -127,6 +129,18 @@ public enum StringManagerSingleton {
             });
   }
 
+  /**
+   * Called once per draw cycle to play the strings "live" in "real time" and handle events in the
+   * local event queue if any
+   */
+  public void playStringsLive() {
+    float boundedFRate = parent.frameRate < MIN_FRAME_RATE ? MIN_FRAME_RATE : parent.frameRate;
+    for (int i = 0; i < GuitarString.SAMPLE_RATE / boundedFRate; ++i) {
+    	EventQueue.getInstance().playEventsTic(GuitarString.TIME_STEP);
+    	ticPlayAll();
+    }
+  }
+
   /** Reset the instance to the initial state. Releases the parent object. */
   public void reset() {
     strings.clear();
@@ -138,5 +152,8 @@ public enum StringManagerSingleton {
   private static PApplet parent = null;
 
   //Data structure for our guitar strings
-  private static LinkedList<StringComponent> strings = new LinkedList<StringComponent>();
+  private LinkedList<StringComponent> strings = new LinkedList<StringComponent>();
+
+  //use a minimum frame rate to prevent infinite tic loop. Introduces audio stuttering when performance suffers
+  private final int MIN_FRAME_RATE = 15;
 }

@@ -1,7 +1,7 @@
 package reusable.keymap;
 
-import main.java.StringManagerSingleton;
-import reusable.runnables.Runnable;
+import main.java.StringManager;
+import reusable.events.Runnable;
 
 /**
  * Runnable class that plucks all strings
@@ -13,7 +13,7 @@ public class AllStringsRunner extends Runnable {
   /** Plucks all the strings in the StringManagerSingleton */
   @Override
   public void run() {
-    StringManagerSingleton.getInstance().pluckAll();
+    StringManager.getInstance().pluckAll();
   }
 
   /** Returns "ASR" */

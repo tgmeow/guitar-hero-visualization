@@ -1,4 +1,4 @@
-package reusable.runnables;
+package reusable.events;
 
 public abstract class Runnable implements Comparable<Runnable> {
 
@@ -14,7 +14,7 @@ public abstract class Runnable implements Comparable<Runnable> {
 
   /** Implement a compareTo method in case sorting is needed */
   @Override
-  public int compareTo(Runnable o) { // TODO Auto-generated method stub
+  public int compareTo(Runnable o) {
     return getComparableID().compareTo(o.getComparableID());
   }
 }
