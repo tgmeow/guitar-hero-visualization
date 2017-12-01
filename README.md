@@ -2,6 +2,8 @@
 Visualizes the Guitar Hero Project from Vanderbilt's Data Structures class.
 Although this project uses a similar object model, it is in a different language and uses different data structures for better flexibility.
 
+![image](https://user-images.githubusercontent.com/16727609/33507521-c82c8092-d6ba-11e7-9e91-d4aa5bc072cf.png)
+
 ### Summary
 This application (currently) lets the user pluck strings, view the data in those strings live, and listen to the result of the plucks. The strings may be paused at any time to let the user see the state of the strings. The strings can also be ticed for one cycle to help understand the results of the Karplus-Strong algorithm on the ring buffer.
 
