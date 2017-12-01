@@ -1,12 +1,18 @@
 package reusable.events;
 
 /**
- * This is different enough from Runnable that I don't know how make them relate to each other 
- * @author tgmeow
+ * This is different enough from Runnable that I don't know how make them relate to each other lol
  *
+ * @author tgmeow
  */
 public class TimedRunnable implements Comparable<TimedRunnable> {
 
+  /**
+   * Constructor, takes a time and a Runnable
+   *
+   * @param time Time in seconds to execute this Runnable
+   * @param runner Executes this runnable when the time is reached
+   */
   public TimedRunnable(double time, Runnable runner) {
     this.runner = runner;
     this.time = time;
@@ -23,6 +29,11 @@ public class TimedRunnable implements Comparable<TimedRunnable> {
     return Double.compare(time, o.time);
   }
 
+  /**
+   * Get the time target of this Timed Runnable
+   *
+   * @return
+   */
   public double getTime() {
     return time;
   }

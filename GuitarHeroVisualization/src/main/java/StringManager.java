@@ -68,7 +68,7 @@ public enum StringManager {
    *
    * @param frequency of the string
    */
-  public void addString(float frequency) {
+  public void addString(double frequency) {
     float roundedLabelFreq = Math.round(frequency * 10) / 10.0F;
     String label = strings.size() + " [" + roundedLabelFreq + "]";
     float xStep = 5;
@@ -136,9 +136,16 @@ public enum StringManager {
   public void playStringsLive() {
     float boundedFRate = parent.frameRate < MIN_FRAME_RATE ? MIN_FRAME_RATE : parent.frameRate;
     for (int i = 0; i < GuitarString.SAMPLE_RATE / boundedFRate; ++i) {
-    	EventQueue.getInstance().playEventsTic(GuitarString.TIME_STEP);
-    	ticPlayAll();
+      ticPlayEvents();
     }
+  }
+  
+  /**
+   * Tic each string once and play the sound, increment the time and check events
+   */
+  public void ticPlayEvents(){
+	  EventQueue.getInstance().playEventsTic(GuitarString.TIME_STEP);
+      ticPlayAll();
   }
 
   /** Reset the instance to the initial state. Releases the parent object. */

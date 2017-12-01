@@ -21,7 +21,7 @@ public class StringRunner extends Runnable {
   public StringRunner(Set<Integer> items) {
     indexes = items;
   }
-  
+
   /**
    * Constructor for the MultiStringRunner
    *
@@ -30,7 +30,7 @@ public class StringRunner extends Runnable {
   public StringRunner(int a) {
     indexes.add(a);
   }
-  
+
   /**
    * Constructor for the MultiStringRunner
    *
@@ -40,7 +40,7 @@ public class StringRunner extends Runnable {
     indexes.add(a);
     indexes.add(b);
   }
-  
+
   /**
    * Constructor for the MultiStringRunner
    *
@@ -51,8 +51,7 @@ public class StringRunner extends Runnable {
     indexes.add(b);
     indexes.add(c);
   }
-  
-  
+
   /**
    * Constructor for the MultiStringRunner
    *
@@ -64,7 +63,6 @@ public class StringRunner extends Runnable {
     indexes.add(c);
     indexes.add(d);
   }
-  
 
   /** Plucks each string in the TreeSet */
   @Override

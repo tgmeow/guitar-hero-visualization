@@ -4,7 +4,9 @@
  */
 package reusable.guitar;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 import java.lang.Math;
 
@@ -25,7 +27,7 @@ public class GuitarString {
    * @param frequency Must be a nonzero float larger than SAMPLE_RATE/2. Represents the frequency of
    *     the GuitarString.
    */
-  public GuitarString(float frequency) {
+  public GuitarString(double frequency) {
     //check validity of frequency
     if (frequency <= 0 || frequency > SAMPLE_RATE / 2) {
       throw new IllegalArgumentException("Invalid frequency of GuitarString: " + frequency);
@@ -34,17 +36,17 @@ public class GuitarString {
     //initialize private vars
     this.ticCount = 0;
     this.frequency = frequency;
-    this.mQueue = new LinkedList<Float>();
+    this.mQueue = Collections.synchronizedList(new LinkedList<Float>());
 
     //calculate size of queue and fill with zeros
     int n = (int) Math.round(SAMPLE_RATE / frequency);
     for (int i = 0; i < n; i++) {
-      mQueue.addLast(0.0F);
+      mQueue.add(0.0F);
     }
   }
 
   /** Pluck the string - excite with white noise between -0.5 and 0.5 */
-  public void pluck() {
+  public synchronized void pluck() {
     for (ListIterator<Float> it = mQueue.listIterator(); it.hasNext(); ) {
       it.next();
       //set operates on the last element returned by next or previous
@@ -53,16 +55,16 @@ public class GuitarString {
   }
 
   /** Advance the simulation one time step */
-  public void tic() {
+  public synchronized void tic() {
     ++ticCount;
-    float current = mQueue.getFirst();
-    mQueue.removeFirst();
-    mQueue.addLast(DECAY_FACTOR * 0.5F * (current + mQueue.getFirst()));
+    float current = mQueue.get(0);
+    mQueue.remove(0);
+    mQueue.add(DECAY_FACTOR * 0.5F * (current + mQueue.get(0)));
   }
 
   /** @return a float representing the current state of the string */
-  public float sample() {
-    return mQueue.getFirst();
+  public synchronized float sample() {
+    return mQueue.get(0);
   }
 
   /** @return Number of tics */
@@ -71,17 +73,17 @@ public class GuitarString {
   }
 
   /** @return Frequency of the string */
-  public float getFrequency() {
+  public double getFrequency() {
     return frequency;
   }
 
   /** @return An iterator to the queue/linkedlist */
-  public ListIterator<Float> getIterator() {
+  public synchronized ListIterator<Float> getIterator() {
     return mQueue.listIterator();
   }
 
   /** @return size of the string */
-  public int getSize() {
+  public synchronized int getSize() {
     return mQueue.size();
   }
 
@@ -98,13 +100,13 @@ public class GuitarString {
 
   //data structure to hold the string values.
   //A linked list used like a queue because need to iterate through.
-  private LinkedList<Float> mQueue;
+  private List<Float> mQueue;
 
   //Number of times tic was called
   private int ticCount;
 
   //frequency of this string
-  private float frequency;
+  private double frequency;
 
   //estimated amount of energy in the string (could be expensive calculation)
   //TODO determine if is worth

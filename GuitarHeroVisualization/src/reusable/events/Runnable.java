@@ -1,5 +1,10 @@
 package reusable.events;
 
+/**
+ * Abstract comparable Runnable that can be "run"
+ *
+ * @author tgmeow
+ */
 public abstract class Runnable implements Comparable<Runnable> {
 
   /** Do the action specified by the inherited class */

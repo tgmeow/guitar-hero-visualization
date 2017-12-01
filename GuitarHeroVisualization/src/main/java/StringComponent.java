@@ -24,7 +24,7 @@ public class StringComponent {
    * @param xStepDist Horizontal distance between each point of the string data
    * @param yHeight Vertical span of the string visualization
    */
-  public StringComponent(PApplet p, float frequency, String label, float xStepDist, float yHeight) {
+  public StringComponent(PApplet p, double frequency, String label, float xStepDist, float yHeight) {
     this.label = label;
     this.xStepDist = xStepDist;
     this.yHeight = yHeight;
@@ -46,16 +46,19 @@ public class StringComponent {
       //TODO REMOVE LOCAL VARIABLE(S)
       int LABEL_OFFSET = 80;
       parent.text(label, 0, 0);
+      
+      synchronized (mString) {
+        ListIterator<Float> it = mString.getIterator();
+        float pY = it.next() * yHeight; //initialize first y value to prev
 
-      ListIterator<Float> it = mString.getIterator();
-      float pY = it.next() * yHeight; //initialize first y value to prev
-
-      //draw all the points
-      for (float x = xStepDist + LABEL_OFFSET; it.hasNext(); x += xStepDist) {
-        float y = it.next() * yHeight; //increments the iterator
-        parent.line(x - xStepDist, pY, x, y);
-        pY = y;
+        //draw all the points
+        for (float x = xStepDist + LABEL_OFFSET; it.hasNext(); x += xStepDist) {
+          float y = it.next() * yHeight; //increments the iterator
+          parent.line(x - xStepDist, pY, x, y);
+          pY = y;
+        }
       }
+      
     }
   }
 

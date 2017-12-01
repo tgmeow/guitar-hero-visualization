@@ -7,9 +7,16 @@ import java.util.Scanner;
 
 import reusable.keymap.StringRunner;
 
+/**
+ * Singleton pattern EventQueue object. Takes TimedRunnables and executes them when the target time
+ * is reached or elapsed
+ *
+ * @author tgmeow
+ */
 public enum EventQueue {
   INSTANCE;
 
+  /** @return EventQueue instance */
   public static EventQueue getInstance() {
     return INSTANCE;
   }
@@ -24,37 +31,47 @@ public enum EventQueue {
     eventQueue.add(new TimedRunnable(time, runner));
   }
 
-  /** @param runner */
+  /** @param runner Adds this timed runnable to the event queue */
   public void addEvent(TimedRunnable runner) {
     eventQueue.add(runner);
   }
-  
-  public void loadStringEventsFile(String filePath){
-	  reset(); //start clean
-	  //TODO selectInput to select/open file. Then parse/read through entire file and add events (if possible) display errors and invalid lines in console
-	  Scanner scan;
-	    File file = new File(filePath);
-	    try {
-	        scan = new Scanner(file);
 
-	        double time = 0;
-        	int string = 0;
-	        while(scan.hasNextDouble())
-	        {
-	        	//read in values from the file
-	        	time = scan.nextDouble();
-	            if(scan.hasNextInt()){
-	            	string = scan.nextInt();
-	            }
-	            //add values to the event queue
-	            addEvent(time, new StringRunner(string));
-	        }
+  /**
+   * Load the song from a file. Structure is time stringIndex where time is a double and stringIndex
+   * is an integer. Order does not matter
+   *
+   * @param file the File to read from
+   */
+  public void loadStringEventsFile(File file) {
+    reset(); //start clean
+    try {
+      Scanner scan = new Scanner(file);
+      //currentSongFName = file.getName();
 
-	    } catch (FileNotFoundException e1) {
-	            e1.printStackTrace();
-	    }
-	  //do not start immediately
-	    pauseEvents();
+      double time = 0;
+      int string = 0;
+      while (scan.hasNextDouble()) {
+        //read in values from the file
+        time = scan.nextDouble();
+        if (scan.hasNextInt()) {
+          string = scan.nextInt();
+        }
+        //add values to the event queue
+        addEvent(time, new StringRunner(string));
+      }
+
+      scan.close();
+
+    } catch (FileNotFoundException e1) {
+      e1.printStackTrace();
+    }
+    //do not start immediately
+    pauseEvents();
+  }
+
+  /** Toggle function for event timer, event run */
+  public void togglePause() {
+    playEvents = !playEvents;
   }
 
   /**
@@ -83,28 +100,29 @@ public enum EventQueue {
     playEvents = false;
   }
 
-  /**
-   * Check if the top event(s) are ready to be played and remove it/them after playing
-   */
+  /** Check if the top event(s) are ready to be played and remove it/them after playing */
   public void playEvents() {
     if (playEvents) {
-      while (!eventQueue.isEmpty() && eventQueue.peek().getTime() <= eventTimer) {
-        eventQueue.remove().run();
+      if (!eventQueue.isEmpty()) {
+        while (!eventQueue.isEmpty() && eventQueue.peek().getTime() <= eventTimer) {
+          eventQueue.remove().run();
+        }
+      } else {
+        playEvents = false; //Stop trying to play events if we run out. ?? //TODO
       }
     }
   }
 
-  /**
-   * @param time Tic the event timer by some amount
-   */
+  /** @param time Tic the event timer by some amount */
   public void ticEventTimer(double time) {
     if (playEvents) {
       eventTimer += time;
     }
   }
-  
+
   /**
    * Check if any events are ready to be played and then increment the tic time after
+   *
    * @param time amount of time to tic
    */
   public void playEventsTic(double time) {
@@ -112,8 +130,8 @@ public enum EventQueue {
     ticEventTimer(time);
     //System.out.println(eventTimer);
   }
-  
-  //Private 
+
+  //Private
 
   //Controls run events/tic
   private boolean playEvents = false;
