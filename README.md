@@ -17,16 +17,21 @@ This application (currently) lets the user pluck strings, view the data in those
 | ESC            | Exit program            |
 
 ### Current Limitations
-- ~~The visualization gets laggy if there are too many strings (currently 13 for 1 whole octave)~~ [Fixed by switching to P2D fac7d2e](https://github.com/tgmeow/guitar-hero-visualization/commit/fac7d2efa312cf269af7dd3dbed85e532573f870)
-- ~~The sound output is frame rate dependent since the call to audio and tic is called each draw cycle~~ [Fixed with threading fac7d2e](https://github.com/tgmeow/guitar-hero-visualization/commit/fac7d2efa312cf269af7dd3dbed85e532573f870)
+- ~~The visualization gets laggy if there are too many strings (currently 13 for 1 whole octave)~~  
+     [Fixed by switching to P2D fac7d2e](https://github.com/tgmeow/guitar-hero-visualization/commit/fac7d2efa312cf269af7dd3dbed85e532573f870)  
+- ~~The sound output is frame rate dependent since the call to audio and tic is called each draw cycle~~  
+     [Fixed with threading fac7d2e](https://github.com/tgmeow/guitar-hero-visualization/commit/fac7d2efa312cf269af7dd3dbed85e532573f870)  
 
 ### Potential Optimizations
-- ~~Only draw the points of the string for X seconds/frames after they are plucked, otherwise just draw a horizontal line~~ [Implemented in v1.1.0 in 0b99e1f](https://github.com/tgmeow/guitar-hero-visualization/commit/0b99e1f9e4ad652920d75dcc9afe80afbd2bf880)
+- ~~Only draw the points of the string for X seconds/frames after they are plucked, otherwise just draw a horizontal line~~ 
+     [Implemented in v1.1.0 in 0b99e1f](https://github.com/tgmeow/guitar-hero-visualization/commit/0b99e1f9e4ad652920d75dcc9afe80afbd2bf880)  
 - Use higher frequencies since high frequencies have shorter ring buffers [Optional now, since we have enough fps]
-- ~~Make audio output asynchronous and not frame dependent (??)~~ [Implemented with threading fac7d2e](https://github.com/tgmeow/guitar-hero-visualization/commit/fac7d2efa312cf269af7dd3dbed85e532573f870)
+- ~~Make audio output asynchronous and not frame dependent (??)~~  
+     [Implemented with threading fac7d2e](https://github.com/tgmeow/guitar-hero-visualization/commit/fac7d2efa312cf269af7dd3dbed85e532573f870)  
 
 ### Future Features
-- ~~Play music from text files~~ [Implemented in v1.0.0 fdc6e96](https://github.com/tgmeow/guitar-hero-visualization/commit/fdc6e96f1be42187d767dc05ea8e5af877d0d749)
+- ~~Play music from text files~~  
+     [Implemented in v1.0.0 fdc6e96](https://github.com/tgmeow/guitar-hero-visualization/commit/fdc6e96f1be42187d767dc05ea8e5af877d0d749)  
 - Customize keybindings
 - Customize number of strings, frequencies, spacing, which strings to visualize
 - Toast text to help the user know what is going on
