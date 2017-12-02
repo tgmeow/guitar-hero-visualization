@@ -5,7 +5,7 @@ package reusable.events;
  *
  * @author tgmeow
  */
-public abstract class Runnable implements Comparable<Runnable> {
+public abstract class GuitarRunnable implements Comparable<GuitarRunnable> {
 
   /** Do the action specified by the inherited class */
   public abstract void run();
@@ -19,7 +19,7 @@ public abstract class Runnable implements Comparable<Runnable> {
 
   /** Implement a compareTo method in case sorting is needed */
   @Override
-  public int compareTo(Runnable o) {
+  public int compareTo(GuitarRunnable o) {
     return getComparableID().compareTo(o.getComparableID());
   }
 }

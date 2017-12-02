@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import reusable.events.Runnable;
+import reusable.events.GuitarRunnable;
 
 /**
  * Singleton pattern for mapping key char (or code?) to Runnable. Many to few relationship from
@@ -38,7 +38,7 @@ public enum KeyMap {
    * @param key
    * @return Map of what keys the char maps to. May be null.
    */
-  public Map<String, Runnable> getRunnables(char key) {
+  public Map<String, GuitarRunnable> getRunnables(char key) {
     return mKeyMap.get(key);
   }
 
@@ -48,9 +48,9 @@ public enum KeyMap {
    * @param c the Char that runs this Runnable
    * @param runnable the Runnable to add to the Map
    */
-  public void addRunnable(char c, Runnable runnable) {
+  public void addRunnable(char c, GuitarRunnable runnable) {
     if (!mKeyMap.containsKey(c)) {
-      mKeyMap.put(c, new HashMap<String, Runnable>());
+      mKeyMap.put(c, new HashMap<String, GuitarRunnable>());
     }
     mKeyMap.get(c).put(runnable.getComparableID(), runnable);
   }
@@ -101,6 +101,6 @@ public enum KeyMap {
   }
 
   //Map from character pressed to a HashMap from comparable String to Runnable items
-  private HashMap<Character, HashMap<String, Runnable>> mKeyMap =
-      new HashMap<Character, HashMap<String, Runnable>>();
+  private HashMap<Character, HashMap<String, GuitarRunnable>> mKeyMap =
+      new HashMap<Character, HashMap<String, GuitarRunnable>>();
 }

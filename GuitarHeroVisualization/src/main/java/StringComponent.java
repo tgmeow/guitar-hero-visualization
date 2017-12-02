@@ -24,7 +24,8 @@ public class StringComponent {
    * @param xStepDist Horizontal distance between each point of the string data
    * @param yHeight Vertical span of the string visualization
    */
-  public StringComponent(PApplet p, double frequency, String label, float xStepDist, float yHeight) {
+  public StringComponent(
+      PApplet p, double frequency, String label, float xStepDist, float yHeight) {
     this.label = label;
     this.xStepDist = xStepDist;
     this.yHeight = yHeight;
@@ -42,23 +43,28 @@ public class StringComponent {
     if (!this.draw) {
       return;
     }
-    if (mString.getSize() > 1) {
-      //TODO REMOVE LOCAL VARIABLE(S)
-      int LABEL_OFFSET = 80;
-      parent.text(label, 0, 0);
-      
-      synchronized (mString) {
-        ListIterator<Float> it = mString.getIterator();
-        float pY = it.next() * yHeight; //initialize first y value to prev
+    //TODO REMOVE LOCAL VARIABLE(S)
+    int LABEL_OFFSET = 80;
+    parent.text(label, 0, 0);
 
-        //draw all the points
-        for (float x = xStepDist + LABEL_OFFSET; it.hasNext(); x += xStepDist) {
-          float y = it.next() * yHeight; //increments the iterator
-          parent.line(x - xStepDist, pY, x, y);
-          pY = y;
+    if (activeString) {
+      if (mString.getSize() > 1) {
+        synchronized (mString) {
+          ListIterator<Float> it = mString.getIterator();
+          float pY = it.next() * yHeight; //initialize first y value to prev
+
+          //draw all the points
+          for (float x = xStepDist + LABEL_OFFSET; it.hasNext(); x += xStepDist) {
+            float y = it.next() * yHeight; //increments the iterator
+            parent.line(x - xStepDist, pY, x, y);
+            pY = y;
+          }
         }
       }
-      
+    } else {
+      //String is inactive. Can cheat a little by drawing a flat line lol
+      float x = xStepDist + LABEL_OFFSET;
+      parent.line(x - xStepDist, 0, x + xStepDist * mString.getSize(), 0);
     }
   }
 
@@ -74,12 +80,16 @@ public class StringComponent {
 
   /** (Pluck the string - excite with white noise between -0.5 and 0.5) */
   public void pluck() {
+    activeString = true;
+    lastPlucked = System.currentTimeMillis();
     this.mString.pluck();
   }
 
   /** Tic the GuitarString object (Advance the simulation one time step) */
   public void tic() {
-    mString.tic();
+    if (activeString) {
+      mString.tic();
+    }
   }
 
   /**
@@ -88,7 +98,10 @@ public class StringComponent {
    * @return a float representing the current state of the string
    */
   public float sample() {
-    return mString.sample();
+    if (activeString) {
+      return mString.sample();
+    }
+    return 0;
   }
 
   /**
@@ -97,8 +110,8 @@ public class StringComponent {
    * @return a float representing the current state of the string
    */
   public float ticAndSample() {
-    mString.tic();
-    return mString.sample();
+    tic();
+    return sample();
   }
 
   /**
@@ -109,6 +122,19 @@ public class StringComponent {
   public int size() {
     return mString.getSize();
   }
+
+  public boolean checkActivity() {
+    activeString = (System.currentTimeMillis() - lastPlucked < INACTIVE_TIME);
+    return activeString;
+  }
+
+  private volatile boolean activeString = false;
+
+  //Keeps track of when the string was last plucked. If time since is > InactiveTime, tic does nothing
+  private long lastPlucked = 0;
+
+  //10 seconds after ticing, the string should be inactive. Max ringing for.. 12 seconds?
+  private final long INACTIVE_TIME = 12000;
 
   //label of the drawn string
   private String label;

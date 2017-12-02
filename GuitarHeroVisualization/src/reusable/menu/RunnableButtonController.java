@@ -2,7 +2,7 @@ package reusable.menu;
 
 import processing.core.PApplet;
 import reusable.button.Button;
-import reusable.events.Runnable;
+import reusable.events.GuitarRunnable;
 
 /**
  * Runs the runnable item when the button is clicked.
@@ -11,7 +11,7 @@ import reusable.events.Runnable;
  */
 public class RunnableButtonController extends Controller<Boolean> {
 
-  public RunnableButtonController(PApplet p, String displayName, Runnable runner) {
+  public RunnableButtonController(PApplet p, String displayName, GuitarRunnable runner) {
     mRunnable = runner;
     mButton = new Button(p, getButtonX(), getButtonY(), buttonWidth, buttonHeight);
     this.parent = p;
@@ -74,5 +74,5 @@ public class RunnableButtonController extends Controller<Boolean> {
   //Initial value and current value will always start at false since its a single event
   private boolean isPressed = false;
 
-  private Runnable mRunnable = null;
+  private GuitarRunnable mRunnable = null;
 }

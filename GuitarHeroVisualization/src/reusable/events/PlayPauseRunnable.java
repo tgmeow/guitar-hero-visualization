@@ -5,7 +5,7 @@ package reusable.events;
  *
  * @author tgmeow
  */
-public class PlayPauseRunnable extends Runnable {
+public class PlayPauseRunnable extends GuitarRunnable {
 
   @Override
   public void run() {

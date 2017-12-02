@@ -4,14 +4,14 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import main.java.StringManager;
-import reusable.events.Runnable;
+import reusable.events.GuitarRunnable;
 
 /**
  * Allows for plucks of multiple strings in one Runnable for uniquely identifiable chords.
  *
  * @author tgmeow
  */
-public class StringRunner extends Runnable {
+public class StringRunner extends GuitarRunnable {
 
   /**
    * Constructor for the MultiStringRunner

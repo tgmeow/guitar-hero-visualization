@@ -13,7 +13,7 @@ public class TimedRunnable implements Comparable<TimedRunnable> {
    * @param time Time in seconds to execute this Runnable
    * @param runner Executes this runnable when the time is reached
    */
-  public TimedRunnable(double time, Runnable runner) {
+  public TimedRunnable(double time, GuitarRunnable runner) {
     this.runner = runner;
     this.time = time;
   }
@@ -39,7 +39,7 @@ public class TimedRunnable implements Comparable<TimedRunnable> {
   }
 
   //The runnable that this should use
-  private Runnable runner = null;
+  private GuitarRunnable runner = null;
 
   //The time value in seconds associated with this runnable
   private double time = 0;

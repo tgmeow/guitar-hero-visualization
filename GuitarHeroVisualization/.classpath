@@ -9,5 +9,15 @@
 	<classpathentry kind="lib" path="libextern/gluegen-rt-natives-windows-amd64.jar"/>
 	<classpathentry kind="lib" path="libextern/gluegen-rt-natives-windows-i586.jar"/>
 	<classpathentry kind="lib" path="libextern/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="libextern/jogl-all-natives-linux-aarch64.jar"/>
+	<classpathentry kind="lib" path="libextern/jogl-all-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="libextern/jogl-all-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="libextern/jogl-all-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="libextern/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="libextern/gluegen-rt-natives-linux-aarch64.jar"/>
+	<classpathentry kind="lib" path="libextern/gluegen-rt-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="libextern/gluegen-rt-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="libextern/gluegen-rt-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="libextern/gluegen-rt-natives-macosx-universal.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

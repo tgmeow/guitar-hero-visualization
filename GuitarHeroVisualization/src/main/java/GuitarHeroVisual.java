@@ -8,11 +8,9 @@ import processing.event.MouseEvent;
 import reusable.events.EventQueue;
 import reusable.events.LoadSongRunnable;
 import reusable.events.PlayPauseRunnable;
-import reusable.guitar.GuitarString;
 import reusable.keymap.AllStringsRunner;
 import reusable.keymap.KeyMap;
 import reusable.keymap.StringRunner;
-import reusable.menu.ButtonController;
 import reusable.menu.Menu;
 import reusable.menu.RunnableButtonController;
 
@@ -64,14 +62,14 @@ public class GuitarHeroVisual extends PApplet {
         new RunnableButtonController(this, "Play/Pause", new PlayPauseRunnable()));
     myMenu.addController(
         "LoadSong0", new RunnableButtonController(this, "Load Song", new LoadSongRunnable(this)));
-    myMenu.addController("Button0", new ButtonController(this, "Button0"));
+    //myMenu.addController("Button0", new ButtonController(this, "Button0"));
 
     //EventQueue.getInstance().addEvent(2, new StringRunner(chordA));
     //EventQueue.getInstance().beginEvents();
-    if (USE_THREADS) {
-      thread("threadedTic");
-      lastThreadTic = System.currentTimeMillis();
-    }
+
+    lastActive = System.currentTimeMillis();
+    noLoop();
+    redraw();
   }
 
   /**
@@ -85,17 +83,25 @@ public class GuitarHeroVisual extends PApplet {
     } else {
       println("User selected " + selection.getAbsolutePath());
       EventQueue.getInstance().loadStringEventsFile(selection);
+      ackEvent();
     }
   }
 
   /** Main draw loop. Target fps is 60, but 30 is also fine. */
   public void draw() {
+    if (!EventQueue.getInstance().isTiccing() && System.currentTimeMillis() - lastActive >= 300) {
+      noLoop();
+      println("no draw activity");
+    }
+    //	  if(!userActivity && !EventQueue.getInstance().isTiccing()){
+    //		  return;
+    //	  }
     background(255);
     //Process menu data at the beginning
-    Menu menuSing = Menu.getInstance();
-    if ((boolean) menuSing.getControllerValue("Button0")) {
-      KeyMap.getInstance().run('q');
-    }
+    //    Menu menuSing = Menu.getInstance();
+    //    if ((boolean) menuSing.getControllerValue("Button0")) {
+    //      KeyMap.getInstance().run('q');
+    //    }
 
     pushMatrix();
     //Enable scrolling
@@ -104,37 +110,15 @@ public class GuitarHeroVisual extends PApplet {
 
     popMatrix();
 
-    if (!pauseTic) {
-      if (!USE_THREADS) StringManager.getInstance().playStringsLive();
-    }
     //if (frameCount % 10 == 0) System.out.println(frameRate);
 
     //Draw menu after
     Menu.getInstance().draw();
   }
 
-  /**
-   * Thread that runs the tic, play and check events via StringManager. Since each tic happens every
-   * 0.022675737 milliseconds, I'll need to set an integer delay and do multiple tics per delay
-   */
-  public void threadedTic() {
-    while (!pauseTic) {
-
-      long diff = System.currentTimeMillis() - lastThreadTic;
-      lastThreadTic += diff;
-      int ticCount = (int) ((diff) * (GuitarString.SAMPLE_RATE / 1000.0));
-      //For 60 FPS ideal speed, should be approx 3000 tic count.
-      //Introduce a ticCountMax in case there is a CPU bottleneck
-      if (ticCount > 10000) ticCount = 10000;
-      for (int i = 0; i < ticCount; ++i) {
-        StringManager.getInstance().ticPlayEvents();
-      }
-      delay(THREAD_TIC_DELAY);
-    }
-  }
-
   /** Called when a key gets pressed */
   public void keyPressed() {
+    ackEvent();
     if (key == ' ') {
       pauseTic = !pauseTic;
       EventQueue.getInstance().togglePause();
@@ -150,6 +134,7 @@ public class GuitarHeroVisual extends PApplet {
 
   /** Handle mouse presses */
   public void mousePressed() {
+    ackEvent();
     Menu.getInstance().pressUpdate(mouseX, mouseY);
   }
 
@@ -160,10 +145,16 @@ public class GuitarHeroVisual extends PApplet {
 
   /** Handle mouse wheel scrolling */
   public void mouseWheel(MouseEvent event) {
+    ackEvent();
     float e = event.getCount();
     verticalScroll -= 10 * e;
     if (verticalScroll >= MAX_SCROLL) verticalScroll = MAX_SCROLL;
     else if (verticalScroll <= MIN_SCROLL) verticalScroll = MIN_SCROLL;
+  }
+
+  private void ackEvent() {
+    loop();
+    lastActive = System.currentTimeMillis();
   }
 
   //Pauses the execution of tics
@@ -180,10 +171,5 @@ public class GuitarHeroVisual extends PApplet {
   private float verticalScroll = 0;
   private final int MIN_SCROLL = -42 * (NUM_STRINGS + 1);
 
-  //Target delay. Due to threading, actual delay may not be accurate.
-  private long lastThreadTic = 0;
-  private final int THREAD_TIC_DELAY = 1;
-
-  //The problem with threads is that threading prioritizes fps. Solution: P2D give much better fps
-  private final boolean USE_THREADS = true;
+  private long lastActive = 0;
 }

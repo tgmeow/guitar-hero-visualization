@@ -82,6 +82,10 @@ public enum StringManager {
    * @param index which string to pluck
    */
   public void pluck(int index) {
+    hasActivity = true;
+    if (useThreads) {
+      EventQueue.getInstance().spawnTicThread(true);
+    }
     if (index >= 0 && index < strings.size()) {
       strings.get(index).pluck();
     }
@@ -89,6 +93,10 @@ public enum StringManager {
 
   /** Pluck all the strings */
   public void pluckAll() {
+    hasActivity = true;
+    if (useThreads) {
+      EventQueue.getInstance().spawnTicThread(true);
+    }
     strings.stream().forEach((str) -> str.pluck());
   }
 
@@ -98,20 +106,27 @@ public enum StringManager {
    * @param index which string to tic
    */
   public void tic(int index) {
-    if (index >= 0 && index < strings.size()) {
-      strings.get(index).tic();
+    if (strings.get(index).checkActivity()) {
+      if (index >= 0 && index < strings.size()) {
+        strings.get(index).tic();
+      }
     }
   }
 
   /** Tic all the strings (advance simulation one step) */
   public void ticAll() {
-    strings.stream().forEach((str) -> str.tic());
+    if (hasActivity) {
+      strings.stream().forEach((str) -> str.tic());
+    }
   }
 
   /** Tic all the strings AND plays the combined sound (samples) in StdAudio */
   public void ticPlayAll() {
-    float sum = (float) strings.stream().mapToDouble(str -> str.ticAndSample()).sum();
-    StdAudio.play(sum);
+    //if not activity, nothing to play
+    if (hasActivity) {
+      float sum = (float) strings.stream().mapToDouble(str -> str.ticAndSample()).sum();
+      StdAudio.play(sum);
+    }
   }
 
   /**
@@ -119,14 +134,16 @@ public enum StringManager {
    * demonstration purposes.
    */
   public void ticAllOneCycle() {
-    strings
-        .stream()
-        .forEach(
-            (str) -> {
-              for (int i = 0; i < str.size(); ++i) {
-                str.tic();
-              }
-            });
+    if (hasActivity) {
+      strings
+          .stream()
+          .forEach(
+              (str) -> {
+                for (int i = 0; i < str.size(); ++i) {
+                  str.tic();
+                }
+              });
+    }
   }
 
   /**
@@ -134,27 +151,68 @@ public enum StringManager {
    * local event queue if any
    */
   public void playStringsLive() {
-    float boundedFRate = parent.frameRate < MIN_FRAME_RATE ? MIN_FRAME_RATE : parent.frameRate;
-    for (int i = 0; i < GuitarString.SAMPLE_RATE / boundedFRate; ++i) {
-      ticPlayEvents();
+    if (hasActivity) {
+      float boundedFRate = parent.frameRate < MIN_FRAME_RATE ? MIN_FRAME_RATE : parent.frameRate;
+      for (int i = 0; i < GuitarString.SAMPLE_RATE / boundedFRate; ++i) {
+        ticPlayEvents();
+      }
     }
   }
-  
-  /**
-   * Tic each string once and play the sound, increment the time and check events
-   */
-  public void ticPlayEvents(){
-	  EventQueue.getInstance().playEventsTic(GuitarString.TIME_STEP);
+
+  /** Tic each string once and play the sound, increment the time and check events */
+  public void ticPlayEvents() {
+    //if no activity, nothing to play but we still want to increment time
+    EventQueue.getInstance().playEventsTic(GuitarString.TIME_STEP);
+    if (hasActivity) {
       ticPlayAll();
+    }
+  }
+
+  /**
+   * Check if the strings have been inactive for long enough to mark their inactivity. Intended to
+   * be called periodically along side the tic call.
+   */
+  public boolean checkInactiveStrings() {
+    hasActivity = false; //initially set to inactive until we find one that is active
+    activityCount = 0;
+    for (StringComponent str : strings) {
+      boolean act = str.checkActivity();
+      if (act) {
+        ++activityCount;
+      }
+      hasActivity = act || hasActivity;
+    }
+    return hasActivity;
   }
 
   /** Reset the instance to the initial state. Releases the parent object. */
   public void reset() {
     strings.clear();
     parent = null;
+    hasActivity = false;
+    activityCount = 0;
+  }
+
+  public boolean getActivity() {
+    return hasActivity;
+  }
+
+  public int getActivityCount() {
+    return activityCount;
+  }
+
+  public void useThreads(boolean val) {
+    useThreads = val;
   }
 
   //Private variables
+  //by default use threads for tics
+  private boolean useThreads = true;
+
+  //async access to mark inactivity
+  private volatile boolean hasActivity = false;
+
+  private int activityCount = 0;
 
   private static PApplet parent = null;
 

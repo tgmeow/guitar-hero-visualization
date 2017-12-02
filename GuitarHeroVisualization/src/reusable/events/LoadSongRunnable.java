@@ -2,7 +2,7 @@ package reusable.events;
 
 import processing.core.PApplet;
 
-public class LoadSongRunnable extends Runnable {
+public class LoadSongRunnable extends GuitarRunnable {
 
   public LoadSongRunnable(PApplet p) {
     parent = p;
