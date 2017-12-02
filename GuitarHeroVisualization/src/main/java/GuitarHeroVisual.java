@@ -89,13 +89,14 @@ public class GuitarHeroVisual extends PApplet {
 
   /** Main draw loop. Target fps is 60, but 30 is also fine. */
   public void draw() {
+	  //FrameRate should only 5 when there is no activity. Otherwise, 60
     if (!EventQueue.getInstance().isTiccing() && System.currentTimeMillis() - lastActive >= 300) {
       noLoop();
+      setFrameRate(5);
       println("no draw activity");
+    } else{
+  	  setFrameRate(60);
     }
-    //	  if(!userActivity && !EventQueue.getInstance().isTiccing()){
-    //		  return;
-    //	  }
     background(255);
     //Process menu data at the beginning
     //    Menu menuSing = Menu.getInstance();
@@ -110,15 +111,26 @@ public class GuitarHeroVisual extends PApplet {
 
     popMatrix();
 
-    //if (frameCount % 10 == 0) System.out.println(frameRate);
+    //if (frameCount % 10 == 0)System.out.println(frameRate);
 
     //Draw menu after
     Menu.getInstance().draw();
   }
+  
+  /**
+   * This is necessary to avoid calling frameRate too many times, which WILL slow down the app and cause error messages
+   * @param newFPS
+   */
+  private void setFrameRate(int newFPS){
+	  if(prevFrameRate != newFPS){
+		  prevFrameRate = newFPS;
+		  frameRate(newFPS);
+	  }
+  }
 
   /** Called when a key gets pressed */
   public void keyPressed() {
-    ackEvent();
+	    ackEvent();
     if (key == ' ') {
       pauseTic = !pauseTic;
       EventQueue.getInstance().togglePause();
@@ -129,8 +141,8 @@ public class GuitarHeroVisual extends PApplet {
       if (pauseTic) { //only let this run if the display is paused
         StringManager.getInstance().ticAllOneCycle();
       }
-    } else KeyMap.getInstance().run(key);
-  }
+    }else KeyMap.getInstance().run(key);
+  } 
 
   /** Handle mouse presses */
   public void mousePressed() {
@@ -153,7 +165,7 @@ public class GuitarHeroVisual extends PApplet {
   }
 
   private void ackEvent() {
-    loop();
+	  loop();
     lastActive = System.currentTimeMillis();
   }
 
@@ -172,4 +184,6 @@ public class GuitarHeroVisual extends PApplet {
   private final int MIN_SCROLL = -42 * (NUM_STRINGS + 1);
 
   private long lastActive = 0;
+  
+  private int prevFrameRate = 60;
 }
