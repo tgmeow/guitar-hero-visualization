@@ -1,5 +1,9 @@
 # guitar-hero-visualization IN PROGRESS NOT READY FOR USE LOL NOT EVEN CLOSE
-This is the C++ port of the application. Development will hopefully continue similarily.
+This is the C++ port of the application. Development will hopefully continue similarily to the 
+main Java version.
+
+Project layout will be similar but not exactly the same. Formatting will use clang-format.
+
 
 ## Roadmap
 - Set up (GLFW)[https://github.com/glfw/glfw] maybe probably (?) something OpenGL.
