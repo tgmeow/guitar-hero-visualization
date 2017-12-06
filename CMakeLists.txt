@@ -21,7 +21,7 @@ hunter_add_package(glfw)
 find_package(glfw3 CONFIG REQUIRED)
 
 #add glad, deps from glfw/deps
-include_directories(./lib/glad/include ./lib//deps)
+include_directories(./lib/glad/include ./lib/deps)
 
 # Include project headers
 include_directories(./include)
