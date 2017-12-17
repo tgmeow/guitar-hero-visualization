@@ -9,7 +9,7 @@ HunterGate(
 
 # Set up my project
 set (PROJECT_NAME guitar-hero-visualization)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -pedantic -pedantic-errors -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -Werror -pedantic -pedantic-errors -g")
 
 project(${PROJECT_NAME})
 include(ExternalProject)
@@ -30,6 +30,10 @@ include_directories(./include)
 set(SOURCE_FILES
         ./lib/glad/src/glad.c   #glad source files
         ./src/GuitarHeroVisual.cpp
+
+        ./src/student/GuitarString.cpp
+        ./src/guitar/StringComponent.cpp
+        ./src/guitar/GH_Reactor.cpp
         )
 # Make the project root directory the working directory when we run
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
