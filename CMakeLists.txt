@@ -34,7 +34,7 @@ set(SOURCE_FILES
         ./src/student/GuitarString.cpp
         ./src/guitar/StringComponent.cpp
         ./src/guitar/GH_Reactor.cpp
-        ./src/guitar/StringManager.cpp src/guitar/KeyMap.cpp)
+        ./src/guitar/StringManager.cpp src/guitar/KeyMap.cpp src/guitar/StringRunner.cpp src/guitar/FunctionRunner.cpp)
 # Make the project root directory the working directory when we run
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

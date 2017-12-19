@@ -15,7 +15,7 @@
 class StringComponent {
 public:
   // Construct the drawable String
-  StringComponent(double frequency, const std::string& label, float xStepDist,
+  StringComponent(double frequency, const std::string &label, float xStepDist,
                   float yHeight);
 
   // draw this string at 0,0 horizontally

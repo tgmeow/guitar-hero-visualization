@@ -8,6 +8,8 @@
 #include <guitar/StringManager.h>
 #include <iostream>
 #include <stdexcept>
+#include <guitar/KeyMap.h>
+#include <guitar/StringRunner.h>
 
 GH_Reactor *GH_Reactor::inst = nullptr;
 
@@ -34,6 +36,8 @@ void GH_Reactor::initialize_program() {
         double factor = pow(2, i / 12.0);
         StringManager::instance()->addString(BASE_FREQ * factor);
     }
+
+    KeyMap::instance()->addRunnable(GLFW_KEY_W, new StringRunner(1));
     //
     //    KeyMap keyMap = KeyMap.getInstance();
     //    keyMap.addRunnable('a', new AllStringsRunner());
@@ -70,13 +74,16 @@ void GH_Reactor::run_key_event(GLFWwindow *window, int key, int scancode,
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
-    if(key == GLFW_KEY_Q && action == GLFW_PRESS){
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
         StringManager::instance()->pluck(0);
     }
-    if(key == GLFW_KEY_A && action == GLFW_PRESS){
+    if (key == GLFW_KEY_A && action == GLFW_PRESS) {
         StringManager::instance()->pluckAll();
     }
-    //todo keymap
+    // todo keymap
+    if(action == GLFW_PRESS) {
+        KeyMap::instance()->run(key);
+    }
 }
 
 void GH_Reactor::run_mouse_event() {} // TODO parameters

@@ -25,7 +25,7 @@ void draw();
 
 // Error
 static void error_callback(int error, const char *description) {
-    fprintf(stderr, "Error: %i: %s\n", error, description);
+  fprintf(stderr, "Error: %i: %s\n", error, description);
 }
 
 // Key bindings function
@@ -45,94 +45,94 @@ static void error_callback(int error, const char *description) {
  * @return main exit code
  */
 int main(void) {
-    //*****setup the window, initialize window things and variables*****//
-    GLFWwindow *window;
-    GLuint vertex_buffer, program;
-    // GLint mvp_location, vpos_location, vcol_location;
-    glfwSetErrorCallback(error_callback);
+  //*****setup the window, initialize window things and variables*****//
+  GLFWwindow *window;
+  GLuint vertex_buffer, program;
+  // GLint mvp_location, vpos_location, vcol_location;
+  glfwSetErrorCallback(error_callback);
 
-    // Check initialization
-    if (!glfwInit()) {
-        exit(EXIT_FAILURE);
-    }
+  // Check initialization
+  if (!glfwInit()) {
+    exit(EXIT_FAILURE);
+  }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    //*****Create window*****//
-    window = glfwCreateWindow(1300, 700, "Simple example", NULL, NULL);
+  //*****Create window*****//
+  window = glfwCreateWindow(1300, 700, "Simple example", NULL, NULL);
 
-    // Check window creation
-    if (!window) {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-
-    // bind key callback
-    glfwSetKeyCallback(window, GH_Reactor::instance()->run_key_event);
-
-    // makes all gl operations go to the current window
-    glfwMakeContextCurrent(window);
-
-    //*****set window variables, settings, create shaders, buffers*****//
-    // ?????
-    // ?????
-
-    gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
-    glfwSwapInterval(1);
-    // NOTE: OpenGL error checks have been omitted for brevity
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-
-    program = glCreateProgram();
-
-    glLinkProgram(program);
-
-    // float ratio;
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    // ratio = width / (float)height;
-
-    // sets the viewport location, view size
-    glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    // glOrtho.xml for 2D canvas
-    glOrtho(0.0, width, height, 0.0, 0.0, 1.0);
-
-    //    glClear(GL_COLOR_BUFFER_BIT);
-
-    // set up the program
-    GH_Reactor::instance()->initialize_program();
-
-    //***** DRAW LOOP *****//
-    while (!glfwWindowShouldClose(window)) {
-        draw();
-
-        // update window
-        glfwSwapBuffers(window);
-        // Process events in queue and do input callbacks
-        glfwPollEvents();
-    }
-    //***** EXIT *****//
-    glfwDestroyWindow(window);
+  // Check window creation
+  if (!window) {
     glfwTerminate();
-    exit(EXIT_SUCCESS);
+    exit(EXIT_FAILURE);
+  }
+
+  // bind key callback
+  glfwSetKeyCallback(window, GH_Reactor::instance()->run_key_event);
+
+  // makes all gl operations go to the current window
+  glfwMakeContextCurrent(window);
+
+  //*****set window variables, settings, create shaders, buffers*****//
+  // ?????
+  // ?????
+
+  gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+  glfwSwapInterval(1);
+  // NOTE: OpenGL error checks have been omitted for brevity
+  glGenBuffers(1, &vertex_buffer);
+  glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+
+  program = glCreateProgram();
+
+  glLinkProgram(program);
+
+  // float ratio;
+  int width, height;
+  glfwGetFramebufferSize(window, &width, &height);
+  // ratio = width / (float)height;
+
+  // sets the viewport location, view size
+  glViewport(0, 0, width, height);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  // glOrtho.xml for 2D canvas
+  glOrtho(0.0, width, height, 0.0, 0.0, 1.0);
+
+  //    glClear(GL_COLOR_BUFFER_BIT);
+
+  // set up the program
+  GH_Reactor::instance()->initialize_program();
+
+  //***** DRAW LOOP *****//
+  while (!glfwWindowShouldClose(window)) {
+    draw();
+
+    // update window
+    glfwSwapBuffers(window);
+    // Process events in queue and do input callbacks
+    glfwPollEvents();
+  }
+  //***** EXIT *****//
+  glfwDestroyWindow(window);
+  glfwTerminate();
+  exit(EXIT_SUCCESS);
 }
 
 void draw() {
 
-    // glUseProgram(program);
+  // glUseProgram(program);
 
-    // background clear color
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  // background clear color
+  glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Line attributes
-    glPointSize(10);
-    glLineWidth(1.0);
+  // Line attributes
+  glPointSize(10);
+  glLineWidth(1.0);
 
-    // GL draw color
-    glColor3f(0.0, 0.0, 0.0);
-    StringManager::instance()->draw();
+  // GL draw color
+  glColor3f(0.0, 0.0, 0.0);
+  StringManager::instance()->draw();
 }

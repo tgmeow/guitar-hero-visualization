@@ -23,8 +23,7 @@ public:
 
   // all key presses enter through here and sent to the KeyMap singleton
   static void run_key_event(GLFWwindow *window, int key, int scancode,
-                            int action,
-                            int mods);
+                            int action, int mods);
 
   // trigger a mouse click/release event
   void run_mouse_event(); // TODO parameters
