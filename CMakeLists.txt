@@ -21,10 +21,10 @@ hunter_add_package(glfw)
 find_package(glfw3 CONFIG REQUIRED)
 
 #add glad, deps from glfw/deps
-include_directories(./lib/glad/include ./lib/deps)
+include_directories("./lib/glad/include" "./lib/deps")
 
 # Include project headers
-include_directories(./include)
+include_directories("./include")
 
 # Define the source files and dependencies for the executable
 set(SOURCE_FILES
@@ -34,7 +34,7 @@ set(SOURCE_FILES
         ./src/student/GuitarString.cpp
         ./src/guitar/StringComponent.cpp
         ./src/guitar/GH_Reactor.cpp
-        )
+        ./src/guitar/StringManager.cpp src/guitar/KeyMap.cpp)
 # Make the project root directory the working directory when we run
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

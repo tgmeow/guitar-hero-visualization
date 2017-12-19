@@ -44,8 +44,8 @@ public:
   // nullptr. Length is more reliable than nullptr since other LinkedLists may
   // have different implementations
 
-  // return a pointer or iterator to the head of the queue. Constructor ensures there are
-  // at least one element in the queue
+  // return a pointer or iterator to the head of the queue. Constructor ensures
+  // there are at least one element in the queue
   std::list<double>::const_iterator getHead() const;
 
   // return the length of the Queue
