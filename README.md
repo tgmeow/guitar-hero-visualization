@@ -2,6 +2,8 @@
 This is the C++ port of the application. Development will hopefully continue similarily to the 
 main Java version.
 
+3/14/2017 UPDATE: After getting distracted by school and things and running into way too many difficulties with the kind of low level programming in GLFW, I have decided to try to use something else and see if it works better. [http://lazyfoo.net/tutorials/SDL/] should be good for the simple line drawings that I need and [http://www.portaudio.com/] MIGHT be good for the audio I want.
+
 Project layout will be similar but not exactly the same. Formatting will use clang-format.
 
 
